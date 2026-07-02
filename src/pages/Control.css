@@ -1,0 +1,132 @@
+.control {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.control h1 {
+  margin-bottom: 0.25rem;
+}
+
+.hint {
+  color: #9ca3af;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+kbd {
+  background: #1f2028;
+  border: 1px solid #374151;
+  border-radius: 0.3rem;
+  padding: 0.05rem 0.4rem;
+  font-family: ui-monospace, monospace;
+}
+
+.open-display {
+  margin: 0.5rem 0 1.5rem;
+  background: #16a34a;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+}
+
+.panel {
+  background: #161821;
+  border: 1px solid #262a38;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.panel h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  color: #b3b6bf;
+}
+
+input,
+textarea {
+  background: #0e0f14;
+  border: 1px solid #2e3140;
+  border-radius: 0.4rem;
+  color: #f3f4f6;
+  padding: 0.5rem 0.6rem;
+}
+
+.rules-field {
+  width: 100%;
+}
+
+.rules-field textarea {
+  resize: vertical;
+}
+
+.status-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.status-pill {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: #374151;
+}
+
+.status-pill.status-running {
+  background: #166534;
+}
+
+.status-pill.status-paused {
+  background: #92400e;
+}
+
+.status-time {
+  font-variant-numeric: tabular-nums;
+  font-size: 1.1rem;
+}
+
+.button-row {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.button-row button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 0.55rem 1rem;
+  border-radius: 0.4rem;
+  font-weight: 600;
+}
+
+.button-row button.danger {
+  background: #b91c1c;
+}
+
+.ticker-input {
+  width: 100%;
+  margin-bottom: 0.75rem;
+}

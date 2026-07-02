@@ -1,0 +1,148 @@
+.display {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  padding: 2vw 3vw 0;
+  background: #0b0c10;
+  color: #f3f4f6;
+  transition: background-color 1.5s ease, color 1.5s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.display.urgency-warning {
+  background: #3a2a06;
+  color: #ffe6a3;
+}
+
+.display.urgency-critical {
+  background: #3a0b0b;
+  color: #ffd1d1;
+}
+
+.display.urgency-done {
+  background: #7f1d1d;
+  color: #fff;
+}
+
+.fullscreen-btn {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: inherit;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.4rem;
+  font-size: 0.85rem;
+  opacity: 0.6;
+}
+
+.fullscreen-btn:hover {
+  opacity: 1;
+}
+
+.display-header {
+  display: flex;
+  gap: 3rem;
+  justify-content: center;
+  font-size: 1.1vw;
+  padding: 0.5rem 0 0;
+}
+
+.header-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.header-label {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.7em;
+  opacity: 0.6;
+}
+
+.header-value {
+  font-weight: 600;
+  font-size: 1.3em;
+}
+
+.display-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5vw;
+}
+
+.countdown {
+  font-size: 20vw;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  transition: color 1.5s ease;
+}
+
+.countdown-label {
+  font-size: 1.5vw;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+}
+
+.current-time {
+  font-size: 2vw;
+  opacity: 0.6;
+  margin-top: 1vw;
+}
+
+.time-up {
+  font-size: 12vw;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+.display-lower {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+  padding: 1rem 0;
+  min-height: 4rem;
+}
+
+.rules {
+  margin: 0;
+  padding: 0.75rem 1.25rem;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 0.5rem;
+  list-style: disc;
+  font-size: 1.1vw;
+  line-height: 1.6;
+}
+
+.ticker {
+  flex: 1;
+  text-align: right;
+  font-size: 1.6vw;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  color: #fde68a;
+}
+
+.progress-track {
+  height: 0.6rem;
+  background: rgba(255, 255, 255, 0.08);
+  width: 100%;
+}
+
+.progress-fill {
+  height: 100%;
+  background: currentColor;
+  transition: width 0.3s linear, background-color 1.5s ease;
+}
