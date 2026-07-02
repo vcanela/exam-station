@@ -1,0 +1,205 @@
+.student {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5vw 2.5vw 0;
+  background: #0b0c10;
+  color: #f3f4f6;
+  transition: background-color 1.5s ease, color 1.5s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.student.urgency-warning {
+  background: #3a2a06;
+  color: #ffe6a3;
+}
+
+.student.urgency-critical {
+  background: #3a0b0b;
+  color: #ffd1d1;
+}
+
+.student.urgency-done {
+  background: #7f1d1d;
+  color: #fff;
+}
+
+.top-bar {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding-top: 0.5rem;
+}
+
+.view-label {
+  flex: 0 0 auto;
+  width: 8rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.4;
+  padding-top: 0.5rem;
+}
+
+.fullscreen-btn,
+.top-bar-spacer {
+  flex: 0 0 auto;
+  width: 8rem;
+}
+
+.fullscreen-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: inherit;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.4rem;
+  font-size: 0.85rem;
+  opacity: 0.6;
+}
+
+.fullscreen-btn:hover {
+  opacity: 1;
+}
+
+.student-header {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+}
+
+.header-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.header-label {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.95vw;
+  opacity: 0.65;
+  font-weight: 600;
+}
+
+.header-value {
+  font-weight: 700;
+  font-size: 2.1vw;
+  line-height: 1.15;
+  max-width: 100%;
+  overflow-wrap: break-word;
+  text-align: center;
+}
+
+.student-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5vw;
+}
+
+.countdown {
+  font-size: 19vw;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  transition: color 1.5s ease;
+}
+
+.countdown-label {
+  font-size: 1.5vw;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+}
+
+.current-time {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6vw;
+  margin-top: 1.2vw;
+  opacity: 0.75;
+}
+
+.current-time-label {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 1vw;
+  opacity: 0.75;
+}
+
+.current-time-value {
+  font-size: 2.2vw;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.time-up {
+  font-size: 10vw;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-align: center;
+}
+
+.student-lower {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem 0 1.25rem;
+}
+
+.announcements,
+.rules {
+  margin: 0;
+  padding: 0.75rem 1.5rem;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 2rem;
+  border-radius: 0.6rem;
+  font-size: 1.7vw;
+  font-weight: 600;
+  text-align: center;
+}
+
+.announcements {
+  background: rgba(253, 230, 138, 0.12);
+  color: #fde68a;
+}
+
+.announcements li::before {
+  content: '📣 ';
+}
+
+.rules {
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 1.4vw;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.rules li::before {
+  content: '• ';
+  opacity: 0.6;
+}
+
+.progress-track {
+  height: 2.25rem;
+  background: rgba(255, 255, 255, 0.08);
+  width: 100%;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.progress-fill {
+  height: 100%;
+  background: currentColor;
+  transition: width 0.3s linear, background-color 1.5s ease;
+  box-shadow: 0 0 1.5rem currentColor;
+}

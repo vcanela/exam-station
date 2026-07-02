@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useExamState } from '../hooks/useExamState'
 import { useNow } from '../hooks/useNow'
 import { computeRemainingMs, formatClock } from '../lib/store'
-import './Display.css'
+import './Student.css'
 
 const WARNING_MS = 15 * 60 * 1000
 const CRITICAL_MS = 5 * 60 * 1000
@@ -29,7 +29,7 @@ function playChime() {
   }
 }
 
-function Display() {
+function Student() {
   const { state } = useExamState()
   const now = useNow(250)
   const [isFullscreen, setIsFullscreen] = useState(false)
@@ -40,6 +40,10 @@ function Display() {
   const isStarted = timer.startedAt != null
   const isTimeUp = isStarted && remainingMs <= 0
   const progress = timer.durationMs > 0 ? 1 - remainingMs / timer.durationMs : 0
+  const announcementLines = ticker.text
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
 
   const urgency = useMemo(() => {
     if (!isStarted) return 'idle'
@@ -77,31 +81,35 @@ function Display() {
   })
 
   return (
-    <div className={`display urgency-${urgency}`}>
-      {!isFullscreen && (
-        <button type="button" className="fullscreen-btn" onClick={enterFullscreen}>
-          Enter fullscreen
-        </button>
-      )}
+    <div className={`student urgency-${urgency}`}>
+      <div className="top-bar">
+        <span className="view-label">Student view</span>
+        <header className="student-header">
+          <div className="header-item">
+            <span className="header-label">Subject</span>
+            <span className="header-value">{config.subject || '—'}</span>
+          </div>
+          <div className="header-item">
+            <span className="header-label">Assessment</span>
+            <span className="header-value">{config.assessment || '—'}</span>
+          </div>
+          <div className="header-item">
+            <span className="header-label">Teacher</span>
+            <span className="header-value">{config.teacher || '—'}</span>
+          </div>
+        </header>
+        {!isFullscreen ? (
+          <button type="button" className="fullscreen-btn" onClick={enterFullscreen}>
+            Enter fullscreen
+          </button>
+        ) : (
+          <span className="top-bar-spacer" />
+        )}
+      </div>
 
-      <header className="display-header">
-        <div className="header-item">
-          <span className="header-label">Subject</span>
-          <span className="header-value">{config.subject || '—'}</span>
-        </div>
-        <div className="header-item">
-          <span className="header-label">Teacher</span>
-          <span className="header-value">{config.teacher || '—'}</span>
-        </div>
-        <div className="header-item">
-          <span className="header-label">Total points</span>
-          <span className="header-value">{config.totalPoints || '—'}</span>
-        </div>
-      </header>
-
-      <main className="display-main">
+      <main className="student-main">
         {isTimeUp ? (
-          <div className="time-up">TIME&apos;S UP</div>
+          <div className="time-up">TIME HAS EXPIRED</div>
         ) : (
           <>
             <div className="countdown">{formatClock(remainingMs)}</div>
@@ -110,10 +118,20 @@ function Display() {
             </div>
           </>
         )}
-        <div className="current-time">{currentTime}</div>
+        <div className="current-time">
+          <span className="current-time-label">Current time</span>
+          <span className="current-time-value">{currentTime}</span>
+        </div>
       </main>
 
-      <div className="display-lower">
+      <div className="student-lower">
+        {announcementLines.length > 0 && (
+          <ul className="announcements">
+            {announcementLines.map((line) => (
+              <li key={line}>{line}</li>
+            ))}
+          </ul>
+        )}
         {config.rules.length > 0 && (
           <ul className="rules">
             {config.rules.map((rule) => (
@@ -121,7 +139,6 @@ function Display() {
             ))}
           </ul>
         )}
-        {ticker.text && <div className="ticker">{ticker.text}</div>}
       </div>
 
       <div className="progress-track">
@@ -134,4 +151,4 @@ function Display() {
   )
 }
 
-export default Display
+export default Student

@@ -6,6 +6,13 @@ import './Control.css'
 
 const FIVE_MIN_MS = 5 * 60 * 1000
 
+const SHORTCUTS = [
+  { key: 'Space', action: 'Pause / resume the timer' },
+  { key: '+', action: 'Add 5 minutes' },
+  { key: '-', action: 'Remove 5 minutes' },
+  { key: 'Esc', action: 'Reset timer (asks to confirm)' },
+]
+
 function Control() {
   const { state, setConfig, setDurationMinutes, setTicker, start, pauseResume, adjustDuration, reset } =
     useExamState()
@@ -61,23 +68,31 @@ function Control() {
   const status = getTimerStatus(timer)
   const remainingMs = computeRemainingMs(timer, now)
 
-  const openDisplay = () => {
-    const url = `${window.location.origin}${window.location.pathname}#/display`
-    window.open(url, 'examStationDisplay')
+  const openStudentView = () => {
+    const url = `${window.location.origin}${window.location.pathname}#/student`
+    window.open(url, 'examStationStudent')
   }
 
   return (
     <div className="control">
-      <h1>Control</h1>
-      <p className="hint">
-        Keep this window on your laptop only. Shortcuts (not while typing in a
-        field): <kbd>Space</kbd> pause/resume, <kbd>+</kbd> / <kbd>-</kbd> add or
-        remove 5 min, <kbd>Esc</kbd> reset (with confirmation).
-      </p>
+      <h1>Control view</h1>
 
-      <button type="button" className="open-display" onClick={openDisplay}>
-        Open Display window
+      <button type="button" className="open-student" onClick={openStudentView}>
+        Open Student view
       </button>
+
+      <section className="panel shortcuts-panel">
+        <h2>Keyboard shortcuts</h2>
+        <p className="hint">Only active on this page, and not while typing in a field.</p>
+        <div className="shortcuts-grid">
+          {SHORTCUTS.map((s) => (
+            <div className="shortcut-row" key={s.key}>
+              <kbd>{s.key}</kbd>
+              <span>{s.action}</span>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <section className="panel">
         <h2>Exam setup</h2>
@@ -91,19 +106,20 @@ function Control() {
             />
           </label>
           <label>
+            Assessment
+            <input
+              type="text"
+              placeholder="e.g. Mid-year exam, Test 3"
+              value={config.assessment}
+              onChange={(e) => setConfig({ assessment: e.target.value })}
+            />
+          </label>
+          <label>
             Teacher
             <input
               type="text"
               value={config.teacher}
               onChange={(e) => setConfig({ teacher: e.target.value })}
-            />
-          </label>
-          <label>
-            Total points
-            <input
-              type="text"
-              value={config.totalPoints}
-              onChange={(e) => setConfig({ totalPoints: e.target.value })}
             />
           </label>
           <label>
@@ -136,24 +152,24 @@ function Control() {
         </div>
         <div className="button-row">
           {status === 'idle' && (
-            <button type="button" onClick={start}>
+            <button type="button" className="btn-start" onClick={start}>
               Start
             </button>
           )}
           {status !== 'idle' && (
-            <button type="button" onClick={pauseResume}>
+            <button type="button" className="btn-pause" onClick={pauseResume}>
               {status === 'paused' ? 'Resume' : 'Pause'}
             </button>
           )}
-          <button type="button" onClick={() => adjustDuration(FIVE_MIN_MS)}>
+          <button type="button" className="btn-plus" onClick={() => adjustDuration(FIVE_MIN_MS)}>
             +5 min
           </button>
-          <button type="button" onClick={() => adjustDuration(-FIVE_MIN_MS)}>
-            -5 min
+          <button type="button" className="btn-minus" onClick={() => adjustDuration(-FIVE_MIN_MS)}>
+            −5 min
           </button>
           <button
             type="button"
-            className="danger"
+            className="btn-reset"
             onClick={() => {
               if (window.confirm('Reset the timer back to its starting duration?')) {
                 reset()
@@ -166,17 +182,21 @@ function Control() {
       </section>
 
       <section className="panel">
-        <h2>Announcement ticker</h2>
-        <input
-          type="text"
+        <h2>Announcements</h2>
+        <p className="hint">
+          One announcement per line — each shows on its own line on the Student view.
+          e.g. "Q4 should say 'Solve for Y', not 'X'" on one line, "Q9 diagram is missing a label" on the next.
+        </p>
+        <textarea
+          rows={3}
           className="ticker-input"
-          placeholder="e.g. Correction: Q4 should say 'Solve for Y', not 'X'"
+          placeholder="Q4 should say 'Solve for Y', not 'X'"
           value={ticker.text}
           onChange={(e) => setTicker(e.target.value)}
         />
         {ticker.text && (
           <button type="button" onClick={() => setTicker('')}>
-            Clear ticker
+            Clear all announcements
           </button>
         )}
       </section>

@@ -5,7 +5,7 @@
 }
 
 .control h1 {
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.75rem;
 }
 
 .hint {
@@ -22,8 +22,8 @@ kbd {
   font-family: ui-monospace, monospace;
 }
 
-.open-display {
-  margin: 0.5rem 0 1.5rem;
+.open-student {
+  margin: 0 0 1.5rem;
   background: #16a34a;
   color: white;
   border: none;
@@ -43,6 +43,36 @@ kbd {
 .panel h2 {
   margin-top: 0;
   font-size: 1.1rem;
+}
+
+.shortcuts-panel {
+  border-left: 4px solid #2563eb;
+}
+
+.shortcuts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem 1.5rem;
+  margin-top: 0.75rem;
+}
+
+.shortcut-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.shortcut-row kbd {
+  font-size: 1rem;
+  padding: 0.3rem 0.7rem;
+  min-width: 2.5rem;
+  text-align: center;
+  background: #1e293b;
+  border-color: #3b4a63;
+}
+
+.shortcut-row span {
+  font-size: 0.95rem;
 }
 
 .field-grid {
@@ -109,24 +139,57 @@ textarea {
 
 .button-row {
   display: flex;
-  gap: 0.6rem;
+  align-items: center;
+  gap: 0.75rem;
   flex-wrap: wrap;
 }
 
 .button-row button {
-  background: #2563eb;
   color: white;
   border: none;
-  padding: 0.55rem 1rem;
-  border-radius: 0.4rem;
-  font-weight: 600;
+  padding: 0.65rem 1.1rem;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  font-size: 1rem;
 }
 
-.button-row button.danger {
-  background: #b91c1c;
+.btn-start {
+  background: #16a34a;
+}
+
+.btn-pause {
+  background: #d97706;
+}
+
+.btn-plus,
+.btn-minus {
+  font-size: 1.2rem;
+  padding: 0.85rem 1.5rem;
+  min-width: 6.5rem;
+}
+
+.btn-plus {
+  background: #0d9488;
+}
+
+.btn-minus {
+  background: #4f46e5;
+}
+
+.btn-reset {
+  background: transparent;
+  border: 2px solid #dc2626 !important;
+  color: #fca5a5;
+  padding: 0.6rem 1.05rem;
+}
+
+.btn-reset:hover {
+  background: #dc2626;
+  color: white;
 }
 
 .ticker-input {
   width: 100%;
-  margin-bottom: 0.75rem;
+  margin: 0.5rem 0 0.75rem;
+  resize: vertical;
 }

@@ -5,8 +5,8 @@ export function defaultState() {
   return {
     config: {
       subject: '',
+      assessment: '',
       teacher: '',
-      totalPoints: '',
       durationMinutes: 45,
       rules: ['Phones away', 'Black/blue ink only', 'Do not turn the page yet'],
     },
