@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { STORAGE_KEY, CHANNEL_NAME, loadState, saveState } from '../lib/store'
+import { STORAGE_KEY, CHANNEL_NAME, loadState, saveState, resolveStartDurationMs } from '../lib/store'
 
 export function useExamState() {
   const [state, setState] = useState(loadState)
@@ -41,21 +41,67 @@ export function useExamState() {
     [commit],
   )
 
+  const setSetupMode = useCallback(
+    (mode) => commit((prev) => ({ ...prev, config: { ...prev.config, setupMode: mode } })),
+    [commit],
+  )
+
   const setDurationMinutes = useCallback(
-    (minutes) =>
+    (minutes) => {
+      const clamped = Math.max(1, Math.round(minutes) || 0)
       commit((prev) => ({
         ...prev,
-        config: { ...prev.config, durationMinutes: minutes },
+        config: { ...prev.config, durationMinutes: clamped },
         timer:
           prev.timer.startedAt == null
-            ? { ...prev.timer, durationMs: minutes * 60 * 1000 }
+            ? { ...prev.timer, durationMs: clamped * 60 * 1000 }
             : prev.timer,
+      }))
+    },
+    [commit],
+  )
+
+  const adjustDurationMinutes = useCallback(
+    (delta) =>
+      commit((prev) => {
+        const next = Math.max(1, prev.config.durationMinutes + delta)
+        return {
+          ...prev,
+          config: { ...prev.config, durationMinutes: next },
+          timer:
+            prev.timer.startedAt == null
+              ? { ...prev.timer, durationMs: next * 60 * 1000 }
+              : prev.timer,
+        }
+      }),
+    [commit],
+  )
+
+  const setEndTime = useCallback(
+    (endTime) => commit((prev) => ({ ...prev, config: { ...prev.config, endTime } })),
+    [commit],
+  )
+
+  const publishAnnouncement = useCallback(
+    (text) => {
+      const trimmed = text.trim()
+      if (!trimmed) return
+      commit((prev) => ({ ...prev, ticker: { items: [...prev.ticker.items, trimmed] } }))
+    },
+    [commit],
+  )
+
+  const removeAnnouncement = useCallback(
+    (index) =>
+      commit((prev) => ({
+        ...prev,
+        ticker: { items: prev.ticker.items.filter((_, i) => i !== index) },
       })),
     [commit],
   )
 
-  const setTicker = useCallback(
-    (text) => commit((prev) => ({ ...prev, ticker: { text } })),
+  const clearAnnouncements = useCallback(
+    () => commit((prev) => ({ ...prev, ticker: { items: [] } })),
     [commit],
   )
 
@@ -63,7 +109,12 @@ export function useExamState() {
     () =>
       commit((prev) => ({
         ...prev,
-        timer: { ...prev.timer, startedAt: Date.now(), pausedAt: null, totalPausedMs: 0 },
+        timer: {
+          durationMs: resolveStartDurationMs(prev.config, Date.now()),
+          startedAt: Date.now(),
+          pausedAt: null,
+          totalPausedMs: 0,
+        },
       })),
     [commit],
   )
@@ -103,7 +154,7 @@ export function useExamState() {
       commit((prev) => ({
         ...prev,
         timer: {
-          durationMs: prev.config.durationMinutes * 60 * 1000,
+          durationMs: resolveStartDurationMs(prev.config, Date.now()),
           startedAt: null,
           pausedAt: null,
           totalPausedMs: 0,
@@ -115,8 +166,13 @@ export function useExamState() {
   return {
     state,
     setConfig,
+    setSetupMode,
     setDurationMinutes,
-    setTicker,
+    adjustDurationMinutes,
+    setEndTime,
+    publishAnnouncement,
+    removeAnnouncement,
+    clearAnnouncements,
     start,
     pauseResume,
     adjustDuration,

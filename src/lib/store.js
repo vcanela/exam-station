@@ -7,7 +7,9 @@ export function defaultState() {
       subject: '',
       assessment: '',
       teacher: '',
+      setupMode: 'duration', // 'duration' | 'endTime'
       durationMinutes: 45,
+      endTime: '', // "HH:MM" (24h)
       rules: ['Phones away', 'Black/blue ink only', 'Do not turn the page yet'],
     },
     timer: {
@@ -17,7 +19,7 @@ export function defaultState() {
       totalPausedMs: 0,
     },
     ticker: {
-      text: '',
+      items: [], // published announcements (strings); these are what students see
     },
   }
 }
@@ -31,7 +33,10 @@ export function loadState() {
     return {
       config: { ...base.config, ...parsed.config },
       timer: { ...base.timer, ...parsed.timer },
-      ticker: { ...base.ticker, ...parsed.ticker },
+      // Normalize the ticker to the items[] shape (older builds stored a `text` string).
+      ticker: {
+        items: Array.isArray(parsed.ticker?.items) ? parsed.ticker.items : [],
+      },
     }
   } catch {
     return defaultState()
@@ -42,6 +47,15 @@ export function saveState(state) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
 }
 
+// Convert an "HH:MM" clock time into a timestamp on the same day as `now`.
+export function endTimeToMs(hhmm, now) {
+  if (!hhmm || !/^\d{1,2}:\d{2}$/.test(hhmm)) return null
+  const [h, m] = hhmm.split(':').map(Number)
+  const d = new Date(now)
+  d.setHours(h, m, 0, 0)
+  return d.getTime()
+}
+
 // Remaining time is always derived from wall-clock timestamps, never from a
 // running counter, so it survives reloads, sleeps, and cross-tab sync cleanly.
 export function computeRemainingMs(timer, now) {
@@ -50,6 +64,30 @@ export function computeRemainingMs(timer, now) {
   const elapsedEnd = pausedAt ?? now
   const elapsed = elapsedEnd - startedAt - totalPausedMs
   return Math.max(0, durationMs - elapsed)
+}
+
+// What the Student view should show. Once started, it's the running timer.
+// While idle, it previews the configured limit (a live countdown to the end
+// time in end-time mode, or the fixed duration in duration mode).
+export function getDisplayRemainingMs(state, now) {
+  const { timer, config } = state
+  if (timer.startedAt != null) return computeRemainingMs(timer, now)
+  if (config.setupMode === 'endTime') {
+    const endMs = endTimeToMs(config.endTime, now)
+    if (endMs == null) return 0
+    return Math.max(0, endMs - now)
+  }
+  return timer.durationMs
+}
+
+// The duration to lock in when the timer starts, based on the setup mode.
+export function resolveStartDurationMs(config, now) {
+  if (config.setupMode === 'endTime') {
+    const endMs = endTimeToMs(config.endTime, now)
+    if (endMs == null) return 0
+    return Math.max(0, endMs - now)
+  }
+  return config.durationMinutes * 60 * 1000
 }
 
 export function getTimerStatus(timer) {

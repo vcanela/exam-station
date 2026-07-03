@@ -1,28 +1,48 @@
+/*
+ * Colours are tuned for projectors in bright rooms: each urgency state pairs a
+ * high-luminance, saturated background with a maximally contrasting text colour
+ * (amber → near-black text, red → white text). Projectors emit light, so a
+ * bright fill reads far better in daylight than a dark one, and the black/white
+ * text keeps contrast high even on mis-calibrated colour settings. The shift is
+ * also a large luminance change, not just hue, so it stays legible for
+ * colour-blind viewers.
+ */
 .student {
   min-height: 100svh;
   display: flex;
   flex-direction: column;
   padding: 1.5vw 2.5vw 0;
-  background: #0b0c10;
-  color: #f3f4f6;
-  transition: background-color 1.5s ease, color 1.5s ease;
+  background: #05060a;
+  color: #ffffff;
+  transition: background-color 1.2s ease, color 1.2s ease;
   position: relative;
   overflow: hidden;
 }
 
 .student.urgency-warning {
-  background: #3a2a06;
-  color: #ffe6a3;
+  background: #f5a105; /* vivid amber */
+  color: #1a1200; /* near-black */
 }
 
 .student.urgency-critical {
-  background: #3a0b0b;
-  color: #ffd1d1;
+  background: #e11d1d; /* vivid red */
+  color: #ffffff;
 }
 
 .student.urgency-done {
-  background: #7f1d1d;
-  color: #fff;
+  background: #c40e0e;
+  color: #ffffff;
+  animation: expired-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes expired-pulse {
+  0%,
+  100% {
+    background: #c40e0e;
+  }
+  50% {
+    background: #8f0808;
+  }
 }
 
 .top-bar {
@@ -154,6 +174,11 @@
   padding: 1rem 0 1.25rem;
 }
 
+/*
+ * The lower bands use their own solid dark backing with light text so they stay
+ * readable on top of ANY urgency background (amber, red, or near-black) rather
+ * than inheriting the state colour.
+ */
 .announcements,
 .rules {
   margin: 0;
@@ -170,8 +195,9 @@
 }
 
 .announcements {
-  background: rgba(253, 230, 138, 0.12);
-  color: #fde68a;
+  background: rgba(0, 0, 0, 0.62);
+  color: #ffd84a;
+  border: 1px solid rgba(255, 216, 74, 0.4);
 }
 
 .announcements li::before {
@@ -179,10 +205,11 @@
 }
 
 .rules {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.18);
   font-size: 1.4vw;
   font-weight: 500;
-  opacity: 0.9;
 }
 
 .rules li::before {
@@ -192,14 +219,13 @@
 
 .progress-track {
   height: 2.25rem;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.35);
   width: 100%;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .progress-fill {
   height: 100%;
   background: currentColor;
-  transition: width 0.3s linear, background-color 1.5s ease;
-  box-shadow: 0 0 1.5rem currentColor;
+  transition: width 0.3s linear, background-color 1.2s ease;
 }

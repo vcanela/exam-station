@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useExamState } from '../hooks/useExamState'
 import { useNow } from '../hooks/useNow'
-import { computeRemainingMs, formatClock } from '../lib/store'
+import { getDisplayRemainingMs, formatClock } from '../lib/store'
 import './Student.css'
 
 const WARNING_MS = 15 * 60 * 1000
@@ -36,14 +36,11 @@ function Student() {
   const hasChimedRef = useRef(false)
 
   const { config, timer, ticker } = state
-  const remainingMs = computeRemainingMs(timer, now)
+  const remainingMs = getDisplayRemainingMs(state, now)
   const isStarted = timer.startedAt != null
   const isTimeUp = isStarted && remainingMs <= 0
   const progress = timer.durationMs > 0 ? 1 - remainingMs / timer.durationMs : 0
-  const announcementLines = ticker.text
-    .split('\n')
-    .map((line) => line.trim())
-    .filter(Boolean)
+  const announcementLines = ticker.items
 
   const urgency = useMemo(() => {
     if (!isStarted) return 'idle'
